@@ -1,0 +1,154 @@
+﻿@inherits LayoutComponentBase
+<style>
+   
+    
+    
+</style>
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+	<link rel="icon" type="image/png" href="images/icons/favicon.png"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/slick/slick.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/MagnificPopup/magnific-popup.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="cssnv/util.css">
+	<link rel="stylesheet" type="text/css" href="cssnv/main.css">
+    <link rel="stylesheet" type="text/css" href="css/footter.css">
+ <div class="fixed-header">
+<header>
+
+		  <marquee  direction="left"> <b class="hd">   <a><b style="color:red">🔔Địa chỉ :</b> 473 Nguyễn Tri Phương , Dĩ an , Bình Dương💓 </a>     &emsp; &emsp;    &emsp;    &emsp;                <a><b style="color:red">📣 📢  Chương Trình Khuyến mãi :</b>  Khung Giờ từ 7h đến 15h ngày thứ 7 và chủ nhật (giảm 5%) giá trị đơn hàng 🧡</a>&emsp; <a><b style="color:red">🔔Địa chỉ :</b> 473 Nguyễn Tri Phương , Dĩ an , Bình Dương💓</a></b></marquee>
+	   
+				<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" >
+					<div class="container">
+					<!-- Logo desktop -->		
+					<a href="#" class="logo">
+                       
+						<img src="Images/logochiens.png" alt="IMG-LOGO">
+                        
+					</a>
+
+					<!-- Menu desktop -->
+					<div class="menu-desktop">
+						<ul class="main-menu">
+							<li class="active-menu">
+								<a href="/" style="font-size:20px">Home</a>
+								
+							</li>
+
+							<li>
+								<a href="/monanchinh/1" style="font-size:20px" >Món Chính</a>
+							</li>
+
+							<li class="label1" data-label1="hot">
+								<a href="/monantrangmieng/2" style="font-size:20px">Món Ăn Vặt</a>
+							</li>
+
+							<li>
+								<a href="/monnuoc/3" style="font-size:20px">Nước</a>
+							</li>
+
+							
+						</ul>
+					</div>	
+                   
+					@*<a class="navbar-brand" asp-area="" href="/">ASM</a>*@
+            <button class="navbar-toggler" type="button" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"  aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <WebLoginPartial />
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                       @* <a class="nav-link text-dark" href="/">Home</a>*@
+                    </li>
+                </ul>
+            </div>
+
+					<!-- Icon header -->
+					<div class="wrap-icon-header flex-w flex-r-m">
+
+					</div>	
+                    </div>
+                     
+                    <br />
+
+       
+        <div class="form-wrapper cf">
+  				<input @bind="search" type="text" placeholder="Search here..." required>
+				<a  href="timkiem/@search">Search</a>
+		</div>
+				
+				</nav>
+			
+                   
+                
+        <hr />
+		
+</header>
+</div>
+<body >
+    <div class="container">
+    <main role="main"  class="pb-3">
+        @Body
+    </main>
+</div>
+</body>
+
+
+
+ <div class="footer-dark">
+<footer>
+        <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3 style="color:orange">Sản Phẩm</h3>
+                        <ul>
+                            <li><a href="#">Món Chính</a></li>
+                            <li><a href="#">Món Ăn Vặt</a></li>
+                            <li><a href="#">Nước Uống</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3 style="color:orange">Dịch vụ</h3>
+                        <ul>
+                            <li><a href="#">Cam kết Hàng đảm bảo chất lượng</a></li>
+                            <li><a href="#">Không chất bảo quản</a></li>
+                            <li><a href="#">Nguyên liệu sạch</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 item text">
+                        <h3 style="color:orange">Châm ngôn</h3>
+                        <p>Đói thì phải ăn, khát thì phải uống, các nhà khoa học gọi đó là định luật bảo toàn tính mạng..</p>
+                    </div>
+                    <div class="col item social"><a href="#"><i class="zmdi zmdi-facebook"></i></a><a href="#"><i class="zmdi zmdi-google-plus"></i></a><a href="#"><i class="zmdi zmdi-twitter"></i></a><a href="#"><i class="zmdi zmdi-instagram"></i></a></div>
+                </div>
+                <p class="copyright">Minh Chien © 2022</p>
+            </div>
+        
+</footer>
+</div>
+
+@code {
+    public string search;
+}

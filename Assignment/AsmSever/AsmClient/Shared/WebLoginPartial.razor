@@ -1,0 +1,111 @@
+﻿@inject Blazored.SessionStorage.ISyncSessionStorageService seessioonStorage
+@inject NavigationManager NavigationManager
+
+<ul class="navbar-nav">
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="=cart" href="/Cart">
+             
+            @if (cart !=null && cart != "")
+            {
+                <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="*">
+							<i class="zmdi zmdi-shopping-cart"></i>
+						</div>
+            }else
+            {
+               <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="*">
+							<i class="zmdi zmdi-shopping-cart"></i>
+						</div>
+            }
+
+        </a>
+
+    </li>
+    
+</ul>
+ 
+<ul class="main-menu" id="navLogin">
+
+
+
+
+    <li class="active-menu">
+		<a>Tài Khoản </a>
+		<ul class="sub-menu">
+		 @if (email != null && email != "")
+        {
+        
+        <li class="nav-item">
+            <a  id="history" href="/History"> Lịch Sử</a>
+           
+        </li>
+        <li class="nav-item">
+            <a  id="history" href="thongtin/@id"> Thông Tin </a>
+           
+        </li>
+        <li class="nav-item">
+            <button id="logout" type="button"  @onclick="Logout"  class="nav-link btn btn-link text-dark"><a href="/logout">Logout</a></button>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="register" href="/register">Đăng Ký</a>
+         </li>   
+          <li class="nav-item">
+            <a class="nav-link text-dark" id="login" href="/Login">Đăng Nhập</a>
+         </li>  
+    }
+								</ul>
+	</li>
+@*    @if (email != null && email != "")
+    {*@
+        @*<li class="nav-item">
+            <a  id="information" href="/Info"> Hello @email ! |</a>
+        </li>*@
+@*
+        <li class="nav-item">
+            <a  id="history" href="/History"> Lịch Sử</a>
+           
+        </li>
+        <li class="nav-item">
+            <button id="logout" type="button"  @onclick="Logout"  class="nav-link btn btn-link text-dark"><a href="/logout">Logout</a></button>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="register" href="/register">Đăng Ký</a>
+         </li>   
+          <li class="nav-item">
+            <a class="nav-link text-dark" id="login" href="/Login">Đăng Nhập</a>
+         </li>  
+    }*@
+     </ul>
+  
+
+     
+
+@code {
+    string email;
+    string cart;
+    public int id;
+    protected override void OnInitialized()
+    {
+        email = seessioonStorage.GetItem<string>("Email");
+         cart = seessioonStorage.GetItem<string>("cart");
+         id=seessioonStorage.GetItem<int>("KhachhangId");
+    }
+    protected void o()
+    {
+        email = seessioonStorage.GetItem<string>("Email");
+        cart = seessioonStorage.GetItem<string>("cart");
+    }
+    protected void Logout()
+    {
+        seessioonStorage.RemoveItem("AccessToken");
+        seessioonStorage.RemoveItem("Email");
+        NavigationManager.NavigateTo("/");
+       
+    }
+
+}

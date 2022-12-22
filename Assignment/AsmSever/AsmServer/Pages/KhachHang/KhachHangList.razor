@@ -1,0 +1,55 @@
+﻿@page "/Khachhanglist"
+@using AsmShare.Models
+@using AsmServer.Data
+@inject AsmShare.Services.IKhachHang_Svc _khachhangService
+<h1>DANH SÁCH Khách Hàng</h1>
+
+
+@if( khachHangs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <a class="btn btn-success p-10" href="/KhachHangDialog/0">Thêm</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên khách hàng</th>
+                <th>SDT</th>
+               
+                <th>Email</th>
+               
+               
+
+            </tr>
+        </thead>
+        <tbody>
+         
+            @foreach (var item in khachHangs)
+           {
+               <tr>
+                   <td>@item.KhachHang_Name</td>
+                   <td>@item.KhachHang_Sdt</td>
+                  
+                   <td>@item.KhachHang_Email</td>
+                  
+                  
+                   <td>
+                       <a class="btn btn-info" href="/KhachHangDialog/@item.KhachHang_Id">Xem Chi Tiết</a>
+                     
+                   </td>
+               </tr>
+           }
+        </tbody>
+    </table>
+}
+@code {
+  
+    public List<KhachHang> khachHangs;
+    protected override void OnInitialized()
+    {
+        khachHangs = _khachhangService.GetKhachHangAll();
+    }
+   
+}

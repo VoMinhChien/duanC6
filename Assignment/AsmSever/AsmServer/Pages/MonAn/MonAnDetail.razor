@@ -1,0 +1,160 @@
+﻿@page "/monandia/{id}"
+@using AsmShare.Models
+@using System.IO
+@using Microsoft.AspNetCore.Hosting
+@inject AsmShare.Services.IMonAnSvc _monanservice
+@inject NavigationManager navigation
+@inject IWebHostEnvironment env
+
+<h3>@Tieude</h3>
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@monAn" OnInvalidSubmit="@SubmitForm">
+            <DataAnnotationsValidator/>
+            <input type="hidden" @bind="monAn.MonAn_Id"/>
+            <div class="form-group">
+                <label class="control-lable">Tên Món Ăn</label>
+                <input @bind="monAn.MonAn_Name" class="form-control"/>
+                <ValidationMessage For="@(()=>monAn.MonAn_Name)"/>
+            </div>
+          <div class="form-group">
+                <label class="control-lable">mô tả</label>
+                <input @bind="monAn.MonAn_MoTa" class="form-control"/>
+                <ValidationMessage For="@(()=>monAn.MonAn_MoTa)"/>
+            </div>
+            <div class="form-group">
+                <label class="control-lable">Giá</label>
+                <input @bind="monAn.MonAn_Gia" class="form-control"/>
+                <ValidationMessage For="@(()=>monAn.MonAn_Gia)"/>
+            </div>
+            <div class="form-group">
+                <label class="control-lable">Phân Loại</label>
+                <InputSelect @bind-Value="@monAn.MonAn_DanhMuc" class="form-control">
+                    @foreach (var phanloai in Enum.GetValues(typeof(Phanloai)))
+                    {
+                        <option value="@phanloai" >
+                            @phanloai
+                        </option>
+                    }
+                </InputSelect>
+            </div>
+            @if (monAn.MonAn_Image != "")
+            {
+                <div class="form-group">
+                    <img src="Images/monan/@monAn.MonAn_Image" style="height:100px">
+                </div>
+            }
+            
+            <div class="form-group">
+                <label class="control-lable">Chọn Hình</label>
+                <InputFile class="form-control" OnChange="OnInputFileChange"/>
+
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" @bind="monAn.Trangthai"/>Trạng Thái
+                </label>
+            </div>
+           
+            <div class="form-group">
+                <button type="submit" class="btn btn-info">
+                    Lưu
+                </button>
+                <input  type="button" class="btn btn-primary" @onclick="@Cancel" value="Thoát"/>
+
+            </div>
+           
+            
+              
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string id{ get; set; }
+    private AsmShare.Models.MonAn monAn{ get; set; }
+    private string Tieude = "";
+    IReadOnlyList<IBrowserFile> selectedFiles;
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrWhiteSpace(id) || id == "0")
+        {
+            Tieude = "Thêm Món Ăn";
+            monAn = new AsmShare.Models.MonAn();
+
+        }
+        else
+        {
+            Tieude = "Sửa Món Ăn";
+            monAn = _monanservice.GetMonAn(int.Parse(id));
+        }
+    }
+    private async void SubmitForm()
+    {
+
+        if (selectedFiles !=null && selectedFiles.Count>0)
+        {
+
+            //var rootpath = $"{env.WebRootPath}\\Images";
+            //if (!Directory.Exists(rootpath))
+            //{
+            //    Directory.CreateDirectory(rootpath);
+            //}
+
+            //string dirPath = rootpath + @"\" + "monan";
+            //if (!Directory.Exists(dirPath))
+            //{
+            //    Directory.CreateDirectory(dirPath);
+            //}
+
+            var file = selectedFiles[0];
+            //string filePath = dirPath + @"\" + file.Name;
+            {
+                Stream stream = file.OpenReadStream();
+                var path = $"{env.WebRootPath}\\Images\\monan\\{file.Name}";
+                var paths = $"{ env.WebRootPath}\\Images\\monan\\{file.Name}";
+                FileStream fs = File.Create(path);
+                await stream.CopyToAsync(fs);
+                stream.Close();
+                fs.Close();
+            }
+
+            monAn.MonAn_Image = file.Name;
+
+        }
+
+        if (monAn.MonAn_Id == 0)      
+        {
+            var ngaytao = DateTime.Now;
+            var ngaysua = DateTime.Now;
+            monAn.MonAn_NgayTao = ngaytao;
+            monAn.IsDelete = false;
+            monAn.VAT = 10;
+            monAn.MonAn_NgaySua = ngaysua;
+            monAn.MonAn_GhiChu = "khongco";
+
+            _monanservice.AddMonAn(monAn);
+        }
+        else
+        { var ngaytao = DateTime.Now;
+            var ngaysua = DateTime.Now;
+            monAn.MonAn_NgayTao = ngaytao;
+            monAn.IsDelete = false;
+            monAn.VAT = 10;
+            monAn.MonAn_NgaySua = ngaysua;
+            monAn.MonAn_GhiChu = "khongco";
+            _monanservice.EditMonAn(monAn.MonAn_Id, monAn);
+        }
+        navigation.NavigateTo("MonAnList");
+    }
+    public void Cancel()
+    {
+        navigation.NavigateTo("MonAnList");
+    }
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFiles = e.GetMultipleFiles();
+        this.StateHasChanged();
+    }
+}

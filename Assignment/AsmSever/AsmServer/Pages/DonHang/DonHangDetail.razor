@@ -1,0 +1,92 @@
+﻿@page "/DonHangDetail/{id}"
+@using AsmShare.Models
+@using System.IO
+@using Microsoft.AspNetCore.Hosting
+@inject AsmShare.Services.IDonHang_Svc _donHangService
+@inject NavigationManager navigation
+@inject IWebHostEnvironment env
+<h3>chi tiết đơn hàng</h3>
+<div>
+    <hr />
+    <dl class="row">
+        
+        <dt class="col-sm-2">Email Khách Hàng</dt>
+        <dd class="col-sm-10">
+            @model.KhachHang.KhachHang_Email
+        </dd>
+        <dt class="col-sm-2">Ngày đặt</dt>
+        <dd class="col-sm-10">
+            @model.NgayDat
+        </dd>
+        <dt class="col-sm-2">Tổng tiền</dt>
+        <dd class="col-sm-10">
+            @model.GiaTienDaVAT
+        </dd>
+        <dt class="col-sm-2">Trạng Thái</dt>
+        <dd class="col-sm-10">
+            @model.HoaDon_TrangThai
+        </dd>  
+        <dt class="col-sm-2">Tổng tiền chưa VAT</dt>
+        <dd class="col-sm-10">
+            @model.GiaTienChuaVAT
+        </dd>  
+        <dt class="col-sm-2">Tên KH</dt>
+        <dd class="col-sm-10">
+            @model.KhachHang_Name
+        </dd> 
+        <dt class="col-sm-2">SDT Khách Hàng</dt>
+        <dd class="col-sm-10">
+            @model.KhachHang_SoDienThoai
+        </dd> 
+        <dt class="col-sm-2">Địa chỉ giao hàng</dt>
+        <dd class="col-sm-10">
+            @model.KhachHang_DiaChi
+        </dd> 
+    </dl>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Món Ăn</th>
+                <th>Hình Ảnh</th>
+                <th>Số Lượng</th>
+                <th>Thành Tiền</th>
+                <th>VAT</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in model.ChiTietDonHangs)
+           {
+               <tr>
+                   <td>@item.MonAn.MonAn_Name</td>
+                   <td><img src="/Images/MonAn/@item.MonAn.MonAn_Image" style="width:150px" /></td>
+                   <td>@item.MonAn_SoLuong</td>
+                   <td>@item.MonAn_Gia</td>
+                   <td>@item.VAT</td>
+               </tr>
+           }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a class="btn btn-info" href="/DonHangDialog/@model.DonHang_Id">Sửa</a>
+    <a class="btn" href="/DonHangList">Danh Sách</a>
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    private string Tieude = "";
+    public DonHang model;
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrWhiteSpace(id) || id == "0")
+        {
+            navigation.NavigateTo("DonHangList", true);
+        }
+        else
+        {
+            model = _donHangService.GetDonHang(int.Parse(id));
+        }
+    }
+
+}

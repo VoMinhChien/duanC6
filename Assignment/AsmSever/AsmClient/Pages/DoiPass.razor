@@ -1,0 +1,117 @@
+﻿@page "/doipass/{id}"
+@using System.Net;
+@using System.ComponentModel.DataAnnotations;
+@using System.Web
+@using AsmShare.Models.ViewModels
+@using Newtonsoft.Json
+@*@layout LayOutDangKy;*@
+@layout WebLayOut;
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+@inject Microsoft.Extensions.Configuration.IConfiguration config;
+@inject IJSRuntime JSRuntime
+<div class="col-md-8">
+                <div class="card mb-4">
+                     <div class="card-header py-3">
+                         <h5 class="mb-0">Đổi Mật khẩu</h5>
+                     </div>
+                      <div class="card-body">
+                          <div class="row">
+                              
+                               
+                         <img src="Images/logochiens.png"/>
+                         <div class="card-body">
+              <ul class="list-group list-group-flush">
+                    <li
+                          class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                          Mật khẩu cũ:
+                          <span><input @bind="password" placeholder="pass cũ"/> </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                          Mật khẩu mới:
+                          <span><input  @bind="passwordnew" placeholder="pass mới"/></span>
+                    </li>
+                           
+              </ul>
+              
+             <button class="btn btn-primary w-50 py-2 mt-4 d-block mx-auto" @onclick="CheckPass"> Đổi</button>
+                @if (!string.IsNullOrEmpty(error))
+                 {
+                     <div class="alert alert-danger mt-3 mb-0">@((MarkupString)error)</div>
+        
+                }
+            </div>
+                          </div>
+                      </div>
+                </div>
+            </div>
+
+
+@*
+
+<ul>
+    <li>
+        Pass cũ
+        <input  @bind="password" placeholder="pass cũ"/>
+    </li>
+    <li>
+        Pass mới
+        <input  @bind="passwordnew" placeholder="pass mới"/>
+    </li>
+    <button class="login100-form-btn" @onclick="CheckPass">
+     Đổi
+    </button>
+    @if (!string.IsNullOrEmpty(error))
+     {
+         <div class="alert alert-danger mt-3 mb-0">@((MarkupString)error)</div>
+        
+      }
+</ul>
+*@
+
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    private string error;
+
+    private string Tieude = "";
+    protected string temp = "";
+    protected string imgUrl = "";
+    public KhachHang list;
+    string password = "";
+    string passwordnew2 = "";
+    string passwordnew = "";
+    private async Task CheckPass()
+    {
+      
+        error = "";
+        if (password == "")
+        {
+            error = " - Bạn cần nhập Mật Khẩu cũ.";
+        }
+        if (passwordnew == "")
+        {
+            error += (error == "" ? "" : "<br/>") + " - Bạn cần nhập Mật khẩu mới.";
+        }   
+        if (error == "")
+        {
+            var apiUrl = config.GetSection("API")["APIUrl"].ToString();
+            var accessToken = sessionStorage.GetItem<string>("AccessToken");
+            ViewDoiPass viewDoiPass = new ViewDoiPass() {IdKhachHang=int.Parse( id), Password = password, PasswordNew = passwordnew };
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+                client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+                client.BaseAddress = new Uri(apiUrl);
+                using (var response = await Http.PutAsJsonAsync("https://localhost:44345/api/token/" + id.ToString(), viewDoiPass)) ;
+                error = "đổi mật khẩu thành công";
+            }
+            
+            
+        }
+    }
+}
+

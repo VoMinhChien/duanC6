@@ -1,0 +1,98 @@
+﻿@page "/History"
+@using System.Net;
+@using AsmShare.Models;
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+@inject IJSRuntime JSRuntime
+@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+@inject Microsoft.Extensions.Configuration.IConfiguration config;
+@inject NavigationManager NavigationManager
+@layout WebLayOut;
+
+<h1>Danh sách đơn hàng</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Khách hàng
+            </th>
+            <th>
+                Ngày đặt
+            </th>
+            <th>
+                Tổng tiền
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in donHangs)
+        {
+            <tr>
+                <td>
+                    @item.KhachHang.KhachHang_Id
+                </td>
+                <td>
+                    @item.NgayDat.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @item.GiaTienDaVAT
+                </td>
+                <td>
+                    @item.HoaDon_TrangThai
+                </td>
+               
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.DonhangID">Edit</a> |*@
+                    <a href="/Detail/@item.DonHang_Id">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    @*<a asp-action="Edit" asp-route-id="@Model.DonhangID">Edit</a> |*@
+    <a href="/">Trang chủ</a>
+</div>
+
+
+@code {
+    private string emailAddress;
+    public List<DonHang> donHangs = new List<DonHang>();
+
+    public AsmShare.Models.ViewModels.Cart giohang;
+    private double total = 0;
+    protected string imgUrl = "";
+    protected string temp = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        emailAddress = sessionStorage.GetItem<string>("Email");//get key cart
+        int khachhangId = sessionStorage.GetItem<int>("KhachhangId");//get key cart
+
+        imgUrl = config.GetSection("API")["ImgUrl"].ToString();
+        var accessToken = sessionStorage.GetItem<string>("AccessToken");
+        var apiUrl = config.GetSection("API")["APIUrl"].ToString();
+        imgUrl = config.GetSection("API")["ImgUrl"].ToString();
+        donHangs = new List<DonHang>();
+        using (var client = new HttpClient())
+        {
+            Dictionary<string, string> query = new Dictionary<string, string>();
+            client.DefaultRequestHeaders.Authorization = new
+                    System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+            client.BaseAddress = new Uri(apiUrl);
+
+            using (var response = await client.GetAsync("Donhang/?id=" + khachhangId))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                donHangs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DonHang>>(apiResponse);
+            }
+        }
+    }
+}
+

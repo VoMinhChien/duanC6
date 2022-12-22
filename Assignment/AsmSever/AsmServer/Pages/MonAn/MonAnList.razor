@@ -1,0 +1,77 @@
+﻿@page "/MonAnList"
+@using AsmShare.Models
+@using AsmServer.Data
+@inject AsmShare.Services.IMonAnSvc _monanservice
+@inject NavigationManager navigation
+
+<h3>Danh sách món ăn</h3>
+
+
+@if (monAns == null)
+{
+    <p><em>Loading.....</em></p>
+}
+else
+{
+    <a class="btn btn-success p-10" href="/monandia/0">Thêm</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Danh mục</th>
+                <th>Hình</th>
+                <th>Trạng Thái</th>
+                <th>Mô Tả</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in monAns)
+           {
+               <tr>
+                   <td>@item.MonAn_Name</td>
+                   <td>@item.MonAn_Gia</td>
+                   <td>
+                        @if ( @item.MonAn_DanhMuc == Phanloai.MonChinh)
+                        {
+                            <span>Món Chính</span>
+                        }
+                        @if (@item.MonAn_DanhMuc == Phanloai.MonTrangMieng)
+                        {
+                            <span>Món Tráng Miệng</span>
+                        }
+                        @if (@item.MonAn_DanhMuc == Phanloai.Nuoc)
+                        {
+                             <span>Nước</span>
+                        }
+                    </td>
+                    <td><img src="Images/monan/@item.MonAn_Image" style="width:100px;height:100px"></td>
+                    <td>@item.Trangthai</td>
+                    <td>@item.MonAn_MoTa</td>
+                    <td>
+                        <a class="btn btn-info" href="/monandia/@item.MonAn_Id">Sửa</a>
+                        <a class="btn btn-warning" @onclick="(()=>Delete(item.MonAn_Id))">Xóa</a>
+                    </td>
+               </tr>
+           }
+        </tbody>
+    </table>
+}
+@code {
+    public List<MonAn> monAns;
+    protected override void OnInitialized()
+    {
+        monAns = _monanservice.GetMonAnAll();
+
+    }
+
+
+ 
+    private void Delete(int id)
+    {
+        
+          _monanservice.xoa(id);
+        monAns = _monanservice.GetMonAnAll();
+    }
+
+}

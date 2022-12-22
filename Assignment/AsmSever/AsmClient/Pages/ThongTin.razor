@@ -1,0 +1,105 @@
+﻿@page "/thongtin/{id}"
+@using AsmShare.Models;
+@using AsmShare.Models.ViewModels
+@using AsmShare.Services
+@using Net.ConnectCode.Barcode;
+@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+@inject Microsoft.Extensions.Configuration.IConfiguration config;
+@*@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage*@
+@layout WebLayOut;
+
+
+<div class="col-md-8">
+                <div class="card mb-4">
+                     <div class="card-header py-3">
+                         <h5 class="mb-0">Thông Tin Của Bạn</h5>
+                     </div>
+                      <div class="card-body">
+                          <div class="row">
+                              
+                               
+                         <img src="Images/logochiens.png"/>
+                         <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                  Họ Tên
+                  <span>@list.KhachHang_Name</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  Email
+                  <span>@list.KhachHang_Email</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  Ngày Sinh
+                  <span> @Convert.ToDateTime(@list.KhachHang_NgaySinh).ToString("dd/MM/yyyy") </span>
+                </li><li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  Số điện thoại
+                  <span>@list.KhachHang_Sdt</span>
+                </li>            
+              </ul>
+              <a class="btn btn-primary" href="/suathongtin/@id">Sửa</a>
+              <a class="btn btn-primary" href="/doipass/@id">Đổi Mật Khẩu</a>
+            </div>
+                          </div>
+                      </div>
+                </div>
+            </div>
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    private string Tieude = "";
+    protected string temp = "";
+    protected string imgUrl = "";
+    public KhachHang list;
+   
+   
+    protected override async Task OnInitializedAsync()
+    {
+
+
+        var apiUrl = config.GetSection("API")["APIUrl"].ToString();
+        var accessToken = sessionStorage.GetItem<string>("AccessToken");
+        list = new KhachHang();
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+            client.BaseAddress = new Uri(apiUrl);
+            using (var response = await client.GetAsync("https://localhost:44345/api/khachhang/" + id))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                list = Newtonsoft.Json.JsonConvert.DeserializeObject<KhachHang>(apiResponse);
+              
+            }
+            }
+        
+
+
+    }
+}

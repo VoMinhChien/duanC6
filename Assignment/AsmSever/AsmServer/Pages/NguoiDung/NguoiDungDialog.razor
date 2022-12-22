@@ -1,0 +1,127 @@
+﻿@page "/nguoidungdialog/{id}"
+@using AsmShare.Models
+@inject AsmShare.Services.INguoiDung_Svc _nguoidungService
+
+@inject NavigationManager navigation
+<h3>@Tieude</h3>
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@nguoiDung" OnValidSubmit="@SubmitForm">
+            <DataAnnotationsValidator/>
+                <input type="hidden" @bind="nguoiDung.NguoiDung_Id"/>
+                <div class="form-group">
+                    <label class="control-label">Tên Đăng nhập</label>
+                    <input @bind="nguoiDung.NguoiDung_UserName" class="form-control"/>
+                    <ValidationMessage For="@(()=>nguoiDung.NguoiDung_UserName)"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Họ Tên</label>
+                    <input @bind="nguoiDung.NguoiDung_Name" class="form-control"/>
+                    <ValidationMessage For="@(()=>nguoiDung.NguoiDung_Name)"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Email</label>
+                    <input @bind="nguoiDung.NguoiDung_Email" class="form-control"/>
+                    <ValidationMessage For="@(()=>nguoiDung.NguoiDung_Email)"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">chức danh</label>
+                     <InputSelect @bind-Value="@nguoiDung.Title" class="form-control">
+                    @foreach (var role in Enum.GetValues(typeof(Role)))
+                    {
+                        <option value="@role" >
+                            @role
+                        </option>
+                    }
+                </InputSelect>
+                    
+                </div>
+
+                <div class="form-group">
+                    <label for="nguoiDung.NguoiDung_NgaySinh" class="control-label">Ngày Sinh</label>
+                    <input type="date" @bind="nguoiDung.NguoiDung_NgaySinh" class="form-control"/>
+                    <ValidationMessage For="@(()=>nguoiDung.NguoiDung_NgaySinh)"/>
+                </div>
+
+               
+                    @if (nguoiDung.NguoiDung_Id != 0)
+                    {
+                        <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" @bind="nguoiDung.Locked"/>Sử dụng
+                    </label>     
+                    </div>
+                    }
+                    else
+                    {
+                
+                    }
+            
+
+                 <div class="form-group">
+                    <label  class="control-label">Số điện thoại</label>
+                    <input  @bind="nguoiDung.NguoiDung_SoDienThoai" class="form-control"/>
+                    <ValidationMessage For="@(()=>nguoiDung.NguoiDung_SoDienThoai)"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="nguoiDung.NguoiDung_PassWord" class="control-label">Nhập mật khẩu</label>
+                    <input type="password" @bind="nguoiDung.NguoiDung_PassWord" class="form-control"/>
+                    <ValidationMessage For="@(()=>nguoiDung.NguoiDung_PassWord)"/>
+                </div>
+
+                 <div class="form-group">
+                    <label for="nguoiDung.NguoiDung_PassWord2" class="control-label">Nhập mật khẩu lần 2</label>
+                    <input type="password" @bind="nguoiDung.NguoiDung_PassWord2" class="form-control"/>
+                    <ValidationMessage For="@(()=>nguoiDung.NguoiDung_PassWord2)"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info">Lưu</button>
+                    <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Thoát"/>
+                </div>
+
+            
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+    private AsmShare.Models.NguoiDung nguoiDung{ get; set; }
+    private string Tieude = "";
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrWhiteSpace(id) || id == "0")
+        {
+           
+            Tieude = "Thêm người dùng";
+            nguoiDung = new AsmShare.Models.NguoiDung();
+        }
+        else
+        {
+            Tieude = "Sửa người dùng";
+            nguoiDung= _nguoidungService.GetNguoidung(int.Parse(id));
+        }
+    }
+    private void SubmitForm()
+    {
+        if (nguoiDung.NguoiDung_Id == 0)
+        { nguoiDung.Locked = false;
+            _nguoidungService.AddNguoidung(nguoiDung);
+        }
+        else
+        {
+            _nguoidungService.EditNguoidung(nguoiDung.NguoiDung_Id, nguoiDung);
+
+        }
+        navigation.NavigateTo("Nguoidunglist");
+    }
+    private void Cancel()
+    {
+        navigation.NavigateTo("Nguoidunglist", true);
+    }
+}

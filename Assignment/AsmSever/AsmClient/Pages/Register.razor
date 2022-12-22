@@ -1,0 +1,211 @@
+﻿@page "/register"
+@using System.Net;
+@using AsmShare.Models;
+@inject IJSRuntime JSRuntime
+@inject Blazored.SessionStorage.ISyncSessionStorageService sessionStorage
+@inject Microsoft.Extensions.Configuration.IConfiguration config;
+@inject NavigationManager NavigationManager
+@layout LayOutDangKy
+@*@layout WebLayOut*@
+@*@layout LayOutDangKy*@
+
+<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+
+
+<link href="css/main.css" rel="stylesheet">
+<link href="css/util.css" rel="stylesheet">
+
+<div class="limiter">
+		<div class="container-login100" style="background-image: url('imagess/bg-01.jpg');">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				 <EditForm Model="@khachhang" OnValidSubmit="@SubmitForm">
+            <DataAnnotationsValidator />
+					<span class="login100-form-title p-b-49">
+						Đăng Ký
+					</span>
+
+					<div class="wrap-input100 validate-input m-b-23" >
+						
+						<input class="input100" type="text" @bind="khachhang.KhachHang_Name" placeholder="Họ tên">
+					
+					</div>
+
+					<div class="wrap-input100 validate-input" >
+						
+						<input class="input100" @bind="khachhang.KhachHang_NgaySinh" type="date" placeholder="Ngày Sinh">
+						
+					</div>
+					
+					<div class="wrap-input100 validate-input m-b-23" >
+						
+						<input class="input100" @bind="khachhang.KhachHang_Sdt" type="tel" placeholder="Số điện thoại">
+						
+					</div>
+                     
+                    <div class="wrap-input100 validate-input m-b-23" >
+						
+						<input class="input100" @bind="khachhang.KhachHang_Email"  type="email" placeholder="Email">
+						
+					</div>
+
+                    <div class="wrap-input100 validate-input m-b-23" >
+						
+						<input class="input100"  @bind="khachhang.KhachHang_PassWord" type="password" placeholder="PassWord">
+						
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-23" >
+						
+						<input class="input100"  @bind="khachhang.KhachHang_PassWord2" type="password" placeholder="PassWord">
+						
+					</div>
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button class="login100-form-btn" type="submit">
+								Đăng Ký
+							</button>
+						</div>
+                        
+					</div>
+
+					
+				</EditForm>
+                
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+	
+
+
+
+
+
+
+
+
+
+
+
+@*
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@khachhang" OnValidSubmit="@SubmitForm">
+            <DataAnnotationsValidator />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Khách hàng</label>
+                <input @bind="khachhang.KhachHang_Name" class="form-control" />
+                <ValidationMessage For="@(() => khachhang.KhachHang_Name)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Ngày sinh</label>
+                <input @bind="khachhang.KhachHang_NgaySinh" class="form-control" type="date" />
+                <ValidationMessage For="@(() => khachhang.KhachHang_NgaySinh)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Phone</label>
+                <input @bind="khachhang.KhachHang_Sdt" class="form-control" type="tel" />
+                <ValidationMessage For="@(() => khachhang.KhachHang_Sdt)" />
+            </div>
+            <div class="form-group">
+                <label asp-for="EmailAddress" class="control-label">Email</label>
+                <input @bind="khachhang.KhachHang_Email" class="form-control" type="email" />
+                <ValidationMessage For="@(() => khachhang.KhachHang_Email)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Mật khẩu</label>
+                <input @bind="khachhang.KhachHang_PassWord" class="form-control" />
+                <ValidationMessage For="@(() => khachhang.KhachHang_PassWord)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Mật khẩu (lần 2)</label>
+                <input @bind="khachhang.KhachHang_PassWord2" class="form-control" />
+                <ValidationMessage For="@(() => khachhang.KhachHang_PassWord2)" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Mota" class="control-label"></label>
+                <input @bind="khachhang.KhachHang_Mota" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/Index">Trang chủ</a>
+</div>*@
+@code {
+     //[Parameter]
+    //public string id { get; set; }
+    AsmShare.Models.KhachHang khachhang = new AsmShare.Models.KhachHang();
+    //public string id { get; set; }
+    //private ASM.Share.Models.MonAn monAn { get; set; }
+    private string Tieude = "Đăng ký";
+    //IReadOnlyList<IBrowserFile> selectedFiles;
+    protected override void OnInitialized()
+    {
+    }
+
+    private async void SubmitForm()
+    {
+        var apiUrl = config.GetSection("API")["APIUrl"].ToString();        
+        var accessToken = sessionStorage.GetItem<string>("AccessToken");
+        //var khachhangId = sessionStorage.GetItem<int>("KhachhangId");
+
+        //giohang.KhanghangId = khachhangId;
+
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            StringContent content = new StringContent(JsonConvert.SerializeObject(khachhang), 
+                System.Text.Encoding.UTF8, "application/json");
+            client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+            HttpResponseMessage response = await client.PostAsync(apiUrl + "Khachhang", content);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                //error += (error == "" ? "" : "<br/>") + " - Lỗi khi gọi API.";
+                //xu ly loi
+                //return Content(response.ToString());
+            }
+            else
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                if (apiResponse == "-1")
+                {
+
+                }
+                else // luu thanh cong
+                {
+                    //sessionStorage.RemoveItem("cart");
+                    //await JSRuntime.InvokeAsync<object>("clearCart", "");
+                    NavigationManager.NavigateTo("/");
+                }
+            }
+        }
+    }
+}
+

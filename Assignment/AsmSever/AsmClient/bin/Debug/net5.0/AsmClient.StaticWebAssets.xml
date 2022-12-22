@@ -1,0 +1,4 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="/" Path="F:\C6\TaiNguyenC6\download\Assignment2\Assignment1\Assignment\AsmSever\AsmClient\bin\Debug\net5.0\wwwroot\" />
+  <ContentRoot BasePath="/" Path="F:\C6\TaiNguyenC6\download\Assignment2\Assignment1\Assignment\AsmSever\AsmClient\obj\Debug\net5.0\scopedcss\bundle\" />
+</StaticWebAssets>

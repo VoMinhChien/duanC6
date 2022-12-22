@@ -1,0 +1,20 @@
+﻿@page "/logincontrol"
+
+@using System.Web;
+
+<AuthorizeView>
+    <Authorized>
+        <b>Xin Chào , @context.User.Identity.Name!</b>
+        <b>Bạn Chắc Chắn muốn đăng xuất ?</b>
+        <a class="ml-md-auto btn btn-primary" 
+        href="/logout?returnUrl=/" 
+        target="_top">Logout</a>
+    </Authorized>
+    <NotAuthorized>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+}

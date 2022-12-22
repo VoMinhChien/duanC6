@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "geSpDrEIsnIsG7BsTx5LGagJGL00bcymUbYHxZCpY5+4Je6SmveiyMHcPiYbrOb0Zy3UOnW2TOpyVsOKEK6ZoA==",
+  "success": true,
+  "projectFilePath": "F:\\C6\\TaiNguyenC6\\download\\Assignment\\AsmSever\\ASM_Server\\ASM_Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MinhChien-PC\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.17\\microsoft.netcore.app.host.win-x64.5.0.17.nupkg.sha512"
+  ],
+  "logs": []
+}

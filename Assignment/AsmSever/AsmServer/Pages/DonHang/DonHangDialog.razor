@@ -1,0 +1,132 @@
+﻿@page "/DonHangDialog/{id}"
+@using AsmShare.Models
+@using System.IO
+@using Microsoft.AspNetCore.Hosting
+@inject AsmShare.Services.IDonHang_Svc _donHangService
+@inject NavigationManager navigation
+@inject IWebHostEnvironment env
+<h3>@Tieude</h3>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="@donhang" OnValidSubmit="@SubmitForm">
+            <DataAnnotationsValidator/>
+                <input type="hidden" @bind="donhang.DonHang_Id"/>
+                <div class="form-group">
+                    
+                    <input type="hidden"  @bind="donhang.KhachHang_Id"  />
+                    
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Email</label>
+                    <input @bind="donhang.KhachHang.KhachHang_Email" disabled/>
+                    <ValidationMessage For="@(()=>donhang.KhachHang_Email)"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Name</label>
+                    <input @bind="donhang.KhachHang_Name" class="form-control" disabled/>
+                    <ValidationMessage For="@(()=>donhang.KhachHang_Name)"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Sdt</label>
+                    <input @bind="donhang.KhachHang_SoDienThoai" class="form-control" disabled/>
+                    <ValidationMessage For="@(()=>donhang.KhachHang_SoDienThoai)"/>
+                </div>
+
+               <div class="form-group">
+                    <label class="control-label">Dia chi</label>
+                    <input @bind="donhang.KhachHang_DiaChi" class="form-control"disabled/>
+                    <ValidationMessage For="@(()=>donhang.KhachHang_DiaChi)"/>
+                </div>
+
+
+                 <div class="form-group">
+                    <label class="control-label">Trạng Thái</label>
+                     <InputSelect @bind-Value="@donhang.HoaDon_TrangThai" class="form-control">
+                    @foreach (var hi in Enum.GetValues(typeof(TrangthaiDonhang)))
+                    {
+                        <option value="@hi" >
+                            @hi
+                        </option>
+                    }
+                </InputSelect>
+                    
+                </div>
+                    
+                <div class="form-group">
+                    <label class="control-label">chưa vat</label>
+                    <input @bind="donhang.GiaTienChuaVAT" class="form-control" disabled/>
+                    <ValidationMessage For="@(()=>donhang.GiaTienChuaVAT)"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">đã vat</label>
+                    <input @bind="donhang.GiaTienDaVAT" class="form-control" disabled/>
+                    <ValidationMessage For="@(()=>donhang.GiaTienDaVAT)"/>
+                </div>
+                 <div class="form-group">
+                    <label class="control-label">vat</label>
+                    <input @bind="donhang.VAT" class="form-control" disabled/>
+                    <ValidationMessage For="@(()=>donhang.VAT)"/>
+                </div>
+                <div class="form-group">
+                    <label for="hoadon.NgayDat" class="control-label">Ngày đặt</label>
+                    <input type="date" @bind="donhang.NgayDat" class="form-control" disabled/>
+                    <ValidationMessage For="@(()=>donhang.NgayDat)"/>
+                </div>
+
+             
+
+                  <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" @bind="donhang.IsDelete"/>Isdelete
+                    </label>     
+                </div>
+
+               
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info">Lưu</button>
+                    <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Thoát"/>
+                </div>
+
+            
+        </EditForm>
+        
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to list</a>
+</div>
+@code {
+    [Parameter]
+    public string id{ get; set; }
+    private AsmShare.Models.DonHang donhang{ get; set; }
+
+    private string Tieude = "";
+    IReadOnlyList<IBrowserFile> selecredFiles;
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrWhiteSpace(id) || id == "0")
+        {
+            navigation.NavigateTo("DonHangList", true);
+        }
+        else
+        {
+            Tieude = "Sửa đơn hàng";
+           
+            donhang = _donHangService.GetDonHang(int.Parse(id));
+        }
+    }
+    
+    private async void SubmitForm()
+    {
+       
+        _donHangService.EditDonHang(donhang.DonHang_Id, donhang);
+        navigation.NavigateTo("DonHangList");
+    }
+    private void Cancel()
+    {
+        navigation.NavigateTo("DonHangList", true);
+    }
+}
